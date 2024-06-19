@@ -1,0 +1,43 @@
+from tkinter import *
+
+def luhn_checksum(card_number):
+  digits = [int(d) for d in str(card_number)]
+  odd_digits = digits[-1::-2]
+  even_digits = digits[-2::-2]
+  checksum = 0
+  checksum += sum(odd_digits)
+  for d in even_digits:
+    checksum += sum(digits_of(d * 2))
+  return checksum % 10
+
+def digits_of(n):
+  return [int(d) for d in str(n)]
+
+def check_card_number():
+  card_number = card_number_entry.get()
+
+  if len(card_number) != 16:
+    result_label.config(text="Номер картки має містити 16 цифр")
+    return
+
+  if luhn_checksum(card_number) == 0:
+    result_label.config(text="Номер картки дійсний")
+  else:
+    result_label.config(text="Номер картки не дійсний")
+
+window = Tk()
+window.title("Перевірка номера кредитної картки")
+
+card_number_label = Label(text="Номер картки:")
+card_number_label.pack()
+
+card_number_entry = Entry()
+card_number_entry.pack()
+
+check_button = Button(text="Перевірити", command=check_card_number)
+check_button.pack()
+
+result_label = Label()
+result_label.pack()
+
+window.mainloop()
